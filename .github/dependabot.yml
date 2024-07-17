@@ -15,11 +15,14 @@ updates:
     groups:
       nx:
         patterns:
-        - "@nx*"
+          - "@nx*"
       angular:
         patterns:
-        - "@angular*"
-        - "zone.js"
+          - "@angular*"
+          - "zone.js"
       ngxs:
         patterns:
           - "@ngxs*"
+      sentry:
+        patterns:
+          - "@sentry*"
