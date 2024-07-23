@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node & Install dependencies
-        uses: stetind/web-github-composite-actions/setup-node-npm-action@setup-node-npm-action-v2
+        uses: stetind/web-github-composite-actions/setup-node-npm-action@v1
 
       - name: Print Environment Info
         run: npx nx report
