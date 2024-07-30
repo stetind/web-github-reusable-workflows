@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    name: Npm Publish
+    name: Publish new version
     runs-on: ${{ inputs.runner }}
     permissions:
       contents: read
