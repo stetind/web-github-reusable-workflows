@@ -1,4 +1,5 @@
 name: Cleanup CI caches
+
 on:
   workflow_call:
 
