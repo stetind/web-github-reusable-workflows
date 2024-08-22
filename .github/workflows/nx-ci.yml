@@ -64,7 +64,7 @@ jobs:
         run: npx nx affected -t stylelint
 
       - name: Run formatting
-        run: npm nx format:check
+        run: npx nx format:check
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
