@@ -5,7 +5,7 @@ on:
 
 jobs:
   cleanup:
-    runs-on: ${{ vars.DEFAULT_RUNNER || 'ubuntu-latest'}}
+    runs-on: 'ubuntu-latest'
     steps:
       - name: Clean cache
         run: |
