@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  workflow_call:
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  commit_lint:
+    name: Validate commit messages
+    runs-on: ${{ vars.DEFAULT_RUNNER || 'ubuntu-latest'}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and NPM
+        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+
+      - name: Install commitlint
+        run: |
+          npm install conventional-changelog-conventionalcommits
+          npm install commitlint@latest
+
+      - name: Validate last commit
+        if: github.event_name == 'push'
+        run: npx commitlint --last --verbose
+
+      - name: Validate PR commits
+        if: github.event_name == 'pull_request'
+        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+  code_quality:
+    name: Run code quality tests
+    runs-on: ${{ vars.DEFAULT_RUNNER || 'ubuntu-latest'}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Connect your workspace on nx.app and uncomment this to enable task distribution.
+      # The "--stop-agents-after" is optional, but allows idle agents to shut down once the "e2e-ci" targets have been requested
+      # - run: npx nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="e2e-ci"
+
+      - name: Setup Node and NPM
+        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+
+      #      - run: npm ci
+
+      - name: Setup SHAs
+        uses: stetind/web-github-composite-actions/setup-shas@v1
+
+      - name: Run linter
+        run: npx nx affected -t lint
+
+      - name: Run stylelint
+        run: npx nx affected -t stylelint
+
+      - name: Run formatting
+        run: npm nx format:check
+
+      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
+      # - run: npx nx-cloud record -- echo Hello World
+      # - run: npx nx affected -t lint test build
+      # run: npx nx affected --parallel 1 -t e2e-ci
+
+  unit_tests:
+    name: Run unit tests
+    runs-on: ${{ vars.DEFAULT_RUNNER || 'ubuntu-latest'}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node and NPM
+        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+
+      - name: Setup SHAs
+        uses: stetind/web-github-composite-actions/setup-shas@v1
+
+      - name: Run tests
+        run: npx nx affected -t test
