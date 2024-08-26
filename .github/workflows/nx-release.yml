@@ -132,4 +132,5 @@ jobs:
             npx nx release publish --tag latest
           fi
         env:
+          GITHUB_TOKEN: ${{ steps.app_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
