@@ -95,6 +95,8 @@ jobs:
 
       - name: Setup Node and NPM
         uses: stetind/web-github-composite-actions/setup-node-npm@v1
+        env:
+          GITHUB_TOKEN: ${{ steps.app_token.outputs.token
 
       - name: Setup SHAs
         uses: stetind/web-github-composite-actions/setup-shas@v1
