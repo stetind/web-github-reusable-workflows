@@ -2,6 +2,9 @@ name: Create Release
 
 on:
   workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
     inputs:
       release_mode:
         description: 'Release mode (regular, dev, first, specific)'
