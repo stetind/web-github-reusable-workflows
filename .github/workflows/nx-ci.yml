@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+        uses: stetind/web-github-composite-actions/setup-node-npm@v2
 
       - name: Install commitlint
         run: |
@@ -53,7 +53,7 @@ jobs:
       # - run: npx nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="e2e-ci"
 
       - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+        uses: stetind/web-github-composite-actions/setup-node-npm@v2
 
       #      - run: npm ci
 
@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+        uses: stetind/web-github-composite-actions/setup-node-npm@v2
 
       - name: Setup SHAs
         uses: stetind/web-github-composite-actions/setup-shas@v1

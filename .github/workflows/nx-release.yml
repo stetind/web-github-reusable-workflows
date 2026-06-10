@@ -94,7 +94,7 @@ jobs:
           git config user.email "${user_id}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com"
 
       - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v1
+        uses: stetind/web-github-composite-actions/setup-node-npm@v2
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
