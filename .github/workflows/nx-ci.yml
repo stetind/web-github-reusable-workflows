@@ -23,21 +23,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node and pnpm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install commitlint
         run: |
-          npm install conventional-changelog-conventionalcommits
-          npm install commitlint@latest
+          pnpm add conventional-changelog-conventionalcommits
+          pnpm add commitlint@latest
 
       - name: Validate last commit
         if: github.event_name == 'push'
-        run: npx commitlint --last --verbose
+        run: pnpm exec commitlint --last --verbose
 
       - name: Validate PR commits
         if: github.event_name == 'pull_request'
-        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+        run: pnpm exec commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
   code_quality:
     name: Run code quality tests
@@ -50,29 +57,37 @@ jobs:
 
       # Connect your workspace on nx.app and uncomment this to enable task distribution.
       # The "--stop-agents-after" is optional, but allows idle agents to shut down once the "e2e-ci" targets have been requested
-      # - run: npx nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="e2e-ci"
+      # - run: pnpm exec nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="e2e-ci"
 
-      - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
-      #      - run: npm ci
+      - name: Setup Node and pnpm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Setup SHAs
         uses: stetind/web-github-composite-actions/setup-shas@v1
 
       - name: Run linter
-        run: npx nx affected -t lint
+        run: pnpm exec nx affected -t lint
 
       - name: Run stylelint
-        run: npx nx affected -t stylelint
+        run: pnpm exec nx affected -t stylelint
 
       - name: Run formatting
-        run: npx nx format:check
+        run: pnpm exec nx format:check
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      # - run: npx nx-cloud record -- echo Hello World
-      # - run: npx nx affected -t lint test build
-      # run: npx nx affected --parallel 1 -t e2e-ci
+      # - run: pnpm exec nx-cloud record -- echo Hello World
+      # - run: pnpm exec nx affected -t lint test build
+      # run: pnpm exec nx affected --parallel 1 -t e2e-ci
 
   unit_tests:
     name: Run unit tests
@@ -83,11 +98,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node and NPM
-        uses: stetind/web-github-composite-actions/setup-node-npm@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node and pnpm cache
+        uses: actions/setup-node@v6
+        with:
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Setup SHAs
         uses: stetind/web-github-composite-actions/setup-shas@v1
 
       - name: Run tests
-        run: npx nx affected -t test
+        run: pnpm exec nx affected -t test
