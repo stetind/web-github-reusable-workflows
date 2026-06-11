@@ -8,7 +8,6 @@ on:
 
 env:
   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  PNPM_VERSION: latest
 
 permissions:
   actions: read
@@ -24,17 +23,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node and pnpm cache
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
+      - name: Setup Node and pnpm
+        uses: stetind/web-github-composite-actions/setup-node-pnpm@v2
 
       - name: Install commitlint
         run: |
@@ -62,20 +52,8 @@ jobs:
       # The "--stop-agents-after" is optional, but allows idle agents to shut down once the "e2e-ci" targets have been requested
       # - run: pnpm exec nx-cloud start-ci-run --distribute-on="5 linux-medium-js" --stop-agents-after="e2e-ci"
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node and pnpm cache
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: stetind/web-github-composite-actions/setup-node-pnpm@v2
 
       - name: Setup SHAs
         uses: stetind/web-github-composite-actions/setup-shas@v1
@@ -103,19 +81,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node and pnpm cache
-        uses: actions/setup-node@v6
-        with:
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: stetind/web-github-composite-actions/setup-node-pnpm@v2
 
       - name: Setup SHAs
         uses: stetind/web-github-composite-actions/setup-shas@v1
